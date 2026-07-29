@@ -1,0 +1,14 @@
+{
+    "name": "Isolated Embedded Environment",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "platformio.platformio-ide",
+                "antmicro.renode"
+            ]
+        }
+    }
+}
