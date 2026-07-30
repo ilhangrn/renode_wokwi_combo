@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Renode portable package
-RUN curl -fsSL -o renode.tar.gz https://builds.renode.io/renode-latest.linux-portable.tar.gz \
+RUN curl -fsSL -o renode.tar.gz https://github.com/renode/renode/releases/download/v1.16.1/renode-1.16.1.linux-arm64-portable-dotnet.tar.gz \
     && mkdir -p /opt/renode \
     && tar -xzf renode.tar.gz -C /opt/renode --strip-components=1 \
     && ln -s /opt/renode/renode /usr/local/bin/renode \
