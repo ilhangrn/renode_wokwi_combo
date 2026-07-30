@@ -4,6 +4,15 @@
     "editor": "wokwi",
     "parts": [
         {
+            "type": "wokwi-led",
+            "id": "led1",
+            "top": -50,
+            "left": 50,
+            "attrs": {
+                "color": "red"
+            }
+        },
+        {
             "type": "board-esp32-c3-devkitm-1",
             "id": "esp",
             "top": 0,
@@ -23,6 +32,22 @@
             "$serialMonitor:TX",
             "",
             []
+        ],
+        [
+            "esp:8",
+            "led1:A",
+            "green",
+            [
+                "v0"
+            ]
+        ],
+        [
+            "esp:GND.1",
+            "led1:C",
+            "black",
+            [
+                "v0"
+            ]
         ]
     ]
 }

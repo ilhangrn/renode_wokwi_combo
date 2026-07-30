@@ -1,0 +1,1 @@
+to edit diagram, open it in another vscode, not in this container. Wokwi will stop you.
