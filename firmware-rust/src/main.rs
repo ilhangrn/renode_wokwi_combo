@@ -4,22 +4,26 @@
 use esp_backtrace as _;
 use esp_hal::{
     delay::Delay,
-    gpio::{Io, Level, Output},
+    gpio::{Level, Output},
 };
 use esp_println::println;
 
-#[esp_hal::entry]
+#[esp_hal::main]
 fn main() -> ! {
+    // 1. New simplified initialization
     let peripherals = esp_hal::init(esp_hal::Config::default());
-    let io = Io::new(peripherals.GPIO, peripherals.IO_MUX);
-    let mut led = Output::new(io.pins.gpio8, Level::Low);
+    
+    // 2. Access the pin directly from `peripherals` instead of `Io::new`
+    let mut led = Output::new(peripherals.GPIO8, Level::Low);
+    
+    // 3. Delay no longer requires passing frozen clocks
     let delay = Delay::new();
 
     println!("Hello from ESP32-C3 Rust Firmware!");
 
     loop {
         led.toggle();
-        println!("Blink Rust loop executed.");
         delay.delay_millis(1000);
+        println!("Blink Rust loop executed.");
     }
 }
