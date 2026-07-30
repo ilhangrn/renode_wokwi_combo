@@ -19,11 +19,13 @@ fn main() -> ! {
     // 3. Delay no longer requires passing frozen clocks
     let delay = Delay::new();
 
-    println!("Hello from ESP32-C3 Rust Firmware!");
+    println!("Hello from ESP32-C3 Rust Firmware! \r\n");
 
     loop {
         led.toggle();
+        // delay.delay_millis(500);
+        let reading = led.is_set_high();
+        println!("Blink Rust loop executed. Pin 8 state: {}\r\n", reading);
         delay.delay_millis(1000);
-        println!("Blink Rust loop executed.");
     }
 }
