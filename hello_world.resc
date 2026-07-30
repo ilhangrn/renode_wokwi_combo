@@ -1,0 +1,31 @@
+logFile $ORIGIN/hello_world-renode.log True
+
+$name?="esp32c3_042_oled"
+$bin?=@https://zephyr-dashboard.renode.io/zephyr/d7a825dc89201dff5389b66bf35bd733bef7c936/esp32c3_042_oled/hello_world/hello_world.elf
+$repl?=$ORIGIN/hello_world.repl
+
+using sysbus
+mach create $name
+
+machine LoadPlatformDescription $repl
+
+
+
+showAnalyzer uart1
+
+uart1 RecordToAsciinema $ORIGIN/hello_world-asciinema
+set osPanicHook
+"""
+self.ErrorLog("OS Panicked")
+"""
+cpu0 AddSymbolHook "z_fatal_error" $osPanicHook
+
+
+macro reset
+"""
+    sysbus LoadELF $bin 
+    cpu0 EnableZephyrMode
+    cpu0 EnableProfilerCollapsedStack $ORIGIN/hello_world-profile true 62914560 maximumNestedContexts=10
+"""
+
+runMacro $reset

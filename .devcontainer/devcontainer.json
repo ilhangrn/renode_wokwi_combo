@@ -1,14 +1,16 @@
 {
-    "name": "Isolated Embedded Environment",
-    "build": {
-        "dockerfile": "Dockerfile"
-    },
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "platformio.platformio-ide",
-                "antmicro.renode"
-            ]
-        }
+  "name": "ESP32 C and Rust Environment",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "platformio.platformio-ide", // Handles C code seamlessly
+        "rust-lang.rust-analyzer",   // Extremeley powerful language server for Rust
+        "tamasfe.even-better-toml"   // Formatting and linting for Cargo.toml
+      ]
     }
+  },
+  "remoteUser": "developer"
 }
