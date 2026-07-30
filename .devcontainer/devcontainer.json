@@ -1,12 +1,15 @@
 {
   "name": "ESP32-C3 Renode Hybrid Dev",
-  "build": { "dockerfile": "Dockerfile" },
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
         "platformio.platformio-ide",
         "rust-lang.rust-analyzer",
-        "antmicro.renode"
+        "antmicro.renode",
+        "Wokwi.wokwi-vscode"
       ]
     }
   }
