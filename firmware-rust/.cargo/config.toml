@@ -1,8 +1,8 @@
-[target.xtensa-esp32-none-elf]
-runner = "espflash flash --monitor"
+[target.riscv32imac-unknown-none-elf]
+rustflags = [
+    "-C", "link-arg=-Tlink.x",
+    "-C", "force-frame-pointers",
+]
 
 [build]
-target = "xtensa-esp32-none-elf"
-
-[unstable]
-build-std = ["alloc", "core"]
+target = "riscv32imac-unknown-none-elf"

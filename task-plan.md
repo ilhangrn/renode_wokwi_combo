@@ -2,7 +2,8 @@
 
 Date: 2026-07-29
 Project type: PlatformIO firmware + Renode simulation + VS Code Dev Container
-# TREE
+
+## TREE
 demo_renode/
 ├── .devcontainer/
 │   ├── devcontainer.json
@@ -20,17 +21,17 @@ demo_renode/
 ├── sim/
 │   ├── esp32c3.repl
 │   └── setup.resc
-└── README.md
+└── task-plan.md
 
 ## 1) Current Status (Observed)
 
 - guide.md exists and describes a full reproducible workflow.
 - .devcontainer/devcontainer.json exists with PlatformIO and Renode extensions.
-- .devcontainer/Dockerfile exists but Renode install URL is incomplete and needs correction.
-- platformio.ini is populated for esp32dev (Arduino framework).
-- src/main.c contains a working LED blink + serial log loop.
-- board_setup.resc is still empty.
-- Cargo.toml and src/main.rs were added (parallel Rust firmware track).
+- .devcontainer/Dockerfile now installs Renode from a valid portable release URL and includes PlatformIO + Rust toolchain setup.
+- firmware-c/platformio.ini is populated for esp32-c3-devkitm-1 (Arduino framework).
+- firmware-c/src/main.c contains a working LED blink + serial log loop.
+- firmware-rust/Cargo.toml and firmware-rust/src/main.rs are configured for ESP32-C3 HAL firmware.
+- sim/setup.resc and sim/esp32c3.repl are present for simulator startup.
 - No .vscode task/debug automation is present yet.
 
 ## 2) Primary Goal
@@ -41,9 +42,9 @@ Build and debug embedded firmware fully inside an isolated dev container, using 
 
 ## M1 - Environment and Toolchain Baseline
 
-- [ ] Fix Renode installation in .devcontainer/Dockerfile (use a valid package source/version).
+- [x] Fix Renode installation in .devcontainer/Dockerfile (use a valid package source/version).
 - [ ] Rebuild and reopen the project in the Dev Container.
-- [ ] Verify tools are available in container: platformio, renode, and arm-none-eabi-gdb.
+- [ ] Verify tools are available in container: platformio, renode, and a RISC-V GDB binary (for example riscv32-esp-elf-gdb).
 - [ ] Document verified tool versions in project notes.
 
 Definition of done:
@@ -52,8 +53,8 @@ Definition of done:
 
 ## M2 - Firmware Project Bootstrap
 
-- [x] Populate platformio.ini with a target board/environment suitable for Renode.
-- [x] Add a minimal firmware app in src/main.c (startup + observable behavior via serial/log).
+- [x] Populate firmware-c/platformio.ini with a target board/environment suitable for Renode.
+- [x] Add a minimal firmware app in firmware-c/src/main.c (startup + observable behavior via serial/log).
 - [ ] Run first successful build (pio run).
 - [ ] Confirm ELF output path for simulator loading.
 
@@ -62,11 +63,11 @@ Definition of done:
 
 ## M3 - Renode Simulation Wiring
 
-- [ ] Implement board_setup.resc to:
-- [ ] create machine,
-- [ ] load platform description,
-- [ ] load firmware ELF,
-- [ ] start GDB server on port 3333 with autostart disabled.
+- [x] Implement sim/setup.resc to:
+- [x] create machine,
+- [x] load platform description,
+- [x] load firmware ELF,
+- [x] start GDB server on port 3333 with autostart disabled.
 - [ ] Run Renode script manually and confirm GDB server startup message.
 
 Definition of done:
@@ -132,8 +133,8 @@ Definition of done:
 
 ## 7) Immediate Next Actions
 
-- [x] Decide target board for first bring-up (currently set to esp32dev in platformio.ini).
+- [x] Decide target board for first bring-up (currently set to ESP32-C3 in firmware-c/platformio.ini).
 - [ ] Run first build to validate artifacts and toolchain (pio run).
-- [ ] Choose one primary track for debugging flow (PlatformIO C in src/main.c or Rust in src/main.rs).
-- [ ] Implement board_setup.resc for the chosen target and verify GDB server startup.
+- [ ] Choose one primary track for debugging flow (PlatformIO C in firmware-c/src/main.c or Rust in firmware-rust/src/main.rs).
+- [ ] Run sim/setup.resc for the chosen target and verify GDB server startup.
 - [ ] Add .vscode/tasks.json and .vscode/launch.json, then run end-to-end dry run: build -> simulate -> debug attach.

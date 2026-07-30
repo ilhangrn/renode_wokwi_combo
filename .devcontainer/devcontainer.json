@@ -1,16 +1,13 @@
 {
-  "name": "ESP32 C and Rust Environment",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
+  "name": "ESP32-C3 Renode Hybrid Dev",
+  "build": { "dockerfile": "Dockerfile" },
   "customizations": {
     "vscode": {
       "extensions": [
-        "platformio.platformio-ide", // Handles C code seamlessly
-        "rust-lang.rust-analyzer",   // Extremeley powerful language server for Rust
-        "tamasfe.even-better-toml"   // Formatting and linting for Cargo.toml
+        "platformio.platformio-ide",
+        "rust-lang.rust-analyzer",
+        "antmicro.renode"
       ]
     }
-  },
-  "remoteUser": "developer"
+  }
 }

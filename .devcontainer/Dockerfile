@@ -1,39 +1,27 @@
 FROM ubuntu:24.04
 
-# Prevent interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install essential build dependencies, Python, and system tools
+# Install dependencies for PlatformIO, Rust, and Renode
 RUN apt-get update && apt-get install -y \
-    curl \
-    git \
-    python3 \
-    python3-pip \
-    python3-venv \
-    libusb-1.0-0 \
-    build-essential \
+    ca-certificates curl git python3 python3-pip python3-venv build-essential \
+    libglib2.0-0 libpixman-1-0 libgtk-3-0 libnss3 libx11-6 libxrender1 libxext6 \
+    xz-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PlatformIO Core globally inside the container
-RUN pip3 install -U platformio --break-system-packages
+# Install Renode portable package
+RUN curl -fsSL -o renode.tar.gz https://builds.renode.io/renode-latest.linux-portable.tar.gz \
+    && mkdir -p /opt/renode \
+    && tar -xzf renode.tar.gz -C /opt/renode --strip-components=1 \
+    && ln -s /opt/renode/renode /usr/local/bin/renode \
+    && rm renode.tar.gz
 
-# Install the Espressif Rust toolchain installer (espup)
-RUN curl -L https://github.com -o /usr/local/bin/espup \
-    && chmod +x /usr/local/bin/espup
+# Install PlatformIO Core
+RUN python3 -m venv /opt/pio-venv \
+    && /opt/pio-venv/bin/pip install --no-cache-dir -U pip platformio
+ENV PATH="/opt/pio-venv/bin:$PATH"
 
-# Create a non-root user for development
-ARG USERNAME=developer
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
-RUN groupadd --gid $USER_GID $USERNAME \
-    --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && apt-get update && apt-get install -y sudo \
-    && echo $USERNAME ALL=\(ALL\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
-
-USER $USERNAME
-WORKDIR /home/developer
-
-# Pre-install the ESP32 Rust target (This runs as the developer user)
-RUN espup install --targets esp32
+# Install Rust toolchain for ESP32-C3 (RISC-V target)
+RUN curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:$PATH"
+RUN rustup target add riscv32imac-unknown-none-elf
