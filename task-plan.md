@@ -2,6 +2,25 @@
 
 Date: 2026-07-29
 Project type: PlatformIO firmware + Renode simulation + VS Code Dev Container
+# TREE
+demo_renode/
+├── .devcontainer/
+│   ├── devcontainer.json
+│   └── Dockerfile
+├── firmware-c/
+│   ├── src/
+│   │   └── main.c
+│   └── platformio.ini
+├── firmware-rust/
+│   ├── src/
+│   │   └── main.rs
+│   ├── Cargo.toml
+│   └── .cargo/
+│       └── config.toml
+├── sim/
+│   ├── esp32c3.repl
+│   └── setup.resc
+└── README.md
 
 ## 1) Current Status (Observed)
 
