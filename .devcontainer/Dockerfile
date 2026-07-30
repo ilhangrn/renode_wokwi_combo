@@ -22,6 +22,15 @@ RUN python3 -m venv /opt/pio-venv \
 ENV PATH="/opt/pio-venv/bin:$PATH"
 
 # Install Rust toolchain for ESP32-C3 (RISC-V target)
-RUN curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh -s -- -y
-ENV PATH="/root/.cargo/bin:$PATH"
-RUN rustup target add riscv32imac-unknown-none-elf
+# --- Update your Rust section to look like this ---
+
+# Install Rust toolchain for ESP32-C3 (RISC-V target) cleanly and non-interactively
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+# Configure environmental layers explicitly for subsequent Docker tasks
+ENV CARGO_HOME=/root/.cargo
+ENV RUSTUP_HOME=/root/.rustup
+ENV PATH="${CARGO_HOME}/bin:${PATH}"
+
+# Add the targets using the absolute toolchain environment explicitly
+RUN . /root/.cargo/env && rustup target add riscv32imac-unknown-none-elf
