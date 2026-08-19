@@ -9,6 +9,10 @@ esp-hal = { version = "0.23.1", features = ["esp32c3"] }
 esp-println = { version = "0.13.0", features = ["esp32c3", "log"] }
 log = "0.4.22"
 
+[lib]
+name = "firmware_rust"
+path = "src/lib.rs"
+
 [[bin]]
 name = "firmware-rust"
 path = "src/main.rs"

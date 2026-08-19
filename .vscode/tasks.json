@@ -1,0 +1,161 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build C Firmware",
+            "type": "shell",
+            "command": "pio",
+            "args": [
+                "run"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/firmware-c"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$platformio"
+            ],
+            "detail": "Build the ESP32-C3 C/Arduino firmware with PlatformIO"
+        },
+        {
+            "label": "Build Rust Firmware",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "build",
+                "--release"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/firmware-rust"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "detail": "Build the ESP32-C3 Rust firmware with cargo"
+        },
+        {
+            "label": "Start Renode Simulation (C)",
+            "type": "shell",
+            "command": "renode",
+            "args": [
+                "${workspaceFolder}/sim/setup.resc"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/sim"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^(Error|Fatal):\\s*(.*)$",
+                    "severity": 1,
+                    "message": 2
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^Renode.*",
+                    "endsPattern": "^Simulation configured.*|^.*GDB server.*started.*"
+                }
+            },
+            "detail": "Start Renode with the C firmware and wait for GDB attach"
+        },
+        {
+            "label": "Start Renode Simulation (Rust)",
+            "type": "shell",
+            "command": "renode",
+            "args": [
+                "${workspaceFolder}/sim/setup.resc"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/sim",
+                "env": {
+                    "RENODE_FW": "rust"
+                }
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^(Error|Fatal):\\s*(.*)$",
+                    "severity": 1,
+                    "message": 2
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^Renode.*",
+                    "endsPattern": "^Simulation configured.*|^.*GDB server.*started.*"
+                }
+            },
+            "detail": "Start Renode with the Rust firmware and wait for GDB attach"
+        },
+        {
+            "label": "Stop Renode",
+            "type": "shell",
+            "command": "pkill",
+            "args": [
+                "-f",
+                "renode.*setup.resc"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Terminate any running Renode instance started from setup.resc"
+        },
+        {
+            "label": "Test C Host",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "${workspaceFolder}/firmware-c/test/desktop_test_sum.c",
+                "${workspaceFolder}/firmware-c/src/math/sum.c",
+                "-I${workspaceFolder}/firmware-c/src",
+                "-o",
+                "${workspaceFolder}/firmware-c/test/desktop_test_sum",
+                "&&",
+                "${workspaceFolder}/firmware-c/test/desktop_test_sum"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/firmware-c"
+            },
+            "group": "test",
+            "problemMatcher": [],
+            "detail": "Compile and run host-side C tests for sum"
+        },
+        {
+            "label": "Test C Target",
+            "type": "shell",
+            "command": "pio",
+            "args": [
+                "test"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/firmware-c"
+            },
+            "group": "test",
+            "problemMatcher": [
+                "$platformio"
+            ],
+            "detail": "Run Unity tests on the ESP32-C3 target"
+        },
+        {
+            "label": "Test Rust Host",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "test",
+                "--lib"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/firmware-rust"
+            },
+            "group": "test",
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "detail": "Run host-side Rust tests for sum"
+        }
+    ]
+}

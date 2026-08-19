@@ -2,24 +2,30 @@
 #![no_main]
 
 use esp_backtrace as _;
+mod math;
+
 use esp_hal::{
     delay::Delay,
     gpio::{Level, Output},
 };
 use esp_println::println;
+use math::sum;
 
 #[esp_hal::main]
 fn main() -> ! {
     // 1. New simplified initialization
     let peripherals = esp_hal::init(esp_hal::Config::default());
-    
+
     // 2. Access the pin directly from `peripherals` instead of `Io::new`
     let mut led = Output::new(peripherals.GPIO8, Level::Low);
-    
+
     // 3. Delay no longer requires passing frozen clocks
     let delay = Delay::new();
 
     println!("Hello from ESP32-C3 Rust Firmware! \r\n");
+
+    let demo = sum(10, 32);
+    println!("sum(10, 32) = {}\r\n", demo);
 
     loop {
         led.toggle();

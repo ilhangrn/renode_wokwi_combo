@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "math/sum.h"
 
 #define LED_PIN 8
 
@@ -7,6 +8,9 @@ void setup()
     Serial.begin(115200);
     pinMode(LED_PIN, OUTPUT);
     Serial.println("Hello from ESP32-C3 C Firmware!");
+
+    int demo = sum(10, 32);
+    Serial.printf("sum(10, 32) = %d\r\n", demo);
 }
 
 void loop()
