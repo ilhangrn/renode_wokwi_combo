@@ -123,6 +123,19 @@ firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust-esp32c3
 firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103
 ```
 
+### Rust linker strategy by target
+
+This repository uses a target-scoped linker setup, which is the recommended approach for multi-board embedded Rust projects.
+
+- Shared linker flags per target are configured in [firmware-rust/.cargo/config.toml](firmware-rust/.cargo/config.toml).
+- **ESP32-C3 (`riscv32imac-unknown-none-elf`)** uses the `esp-hal` linker flow (`-Tlinkall.x`) and does not use an STM32 memory script.
+- **STM32F103 (`thumbv7m-none-eabi`)** uses `cortex-m-rt` (`-Tlink.x`) plus a board memory layout at [firmware-rust/linker/stm32f103/memory.x](firmware-rust/linker/stm32f103/memory.x).
+
+Why this matters:
+
+- It prevents one board's memory map from breaking another board's link step.
+- It keeps linker behavior explicit and maintainable as more boards are added.
+
 # Simulate with Wokwi
 
 [Wokwi](https://wokwi.com) provides a browser/visual simulation for both boards. Board-specific diagrams and firmware selectors live under [wokwi/](wokwi/).
