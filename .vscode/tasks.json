@@ -42,7 +42,7 @@
             "type": "shell",
             "command": "renode",
             "args": [
-                "${workspaceFolder}/sim/setup.resc"
+                "setup.resc"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/sim"
@@ -67,7 +67,7 @@
             "type": "shell",
             "command": "renode",
             "args": [
-                "${workspaceFolder}/sim/setup.resc"
+                "setup.resc"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/sim",

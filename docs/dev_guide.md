@@ -15,17 +15,45 @@ demo_renode/
 ├── .devcontainer/          # VS Code Dev Container setup
 │   ├── devcontainer.json
 │   └── Dockerfile
-├── docs/
-│   └── dev_guide.md        # This file
+├── docs/                   # Guides and documentation
+│   ├── dev_guide.md        # This file
+│   ├── pio_guide.md        # PlatformIO commands and tests
+│   ├── repl_guide.md       # REPL generation from device tree
+│   ├── renode_guide.md     # Renode simulation and GDB debug
+│   ├── sim_guide.md        # Simulation workflow overview
+│   └── wokwi_guide.md      # Wokwi visual simulation
 ├── firmware-c/             # C/Arduino firmware (PlatformIO)
 │   ├── platformio.ini
-│   └── src/main.cpp
+│   ├── src/
+│   │   ├── main.cpp
+│   │   └── math/
+│   │       ├── sum.c
+│   │       └── sum.h
+│   └── test/
+│       ├── desktop_test_sum.c
+│       └── test_sum.cpp
 ├── firmware-rust/          # Rust firmware (esp-hal)
 │   ├── Cargo.toml
-│   └── src/main.rs
-├── sim/                    # Renode simulation scripts
-│   ├── esp32c3.repl        # Platform description
-│   └── setup.resc          # Simulation startup script
+│   ├── src/
+│   │   ├── lib.rs
+│   │   ├── main.rs
+│   │   └── math/
+│   │       └── mod.rs
+│   └── tests/
+│       └── test_sum.rs
+├── sim/                                   # Renode simulation scripts
+│   ├── esp32c3_devkitm.dts                # Project top-level DTS (Zephyr)
+│   ├── esp32c3_devkitm_flat.dts           # Flattened DTS
+│   ├── esp32c3_devkitm_generated.repl     # dts2repl output (with remote ROM/SVD)
+│   ├── esp32c3_devkitm_generated_offline.repl # Offline-friendly REPL (used)
+│   ├── esp32c3.repl                       # Legacy hand-written platform description
+│   ├── esp32c3_common.dtsi                # Zephyr device-tree source (reference)
+│   ├── esp32c3.dts                        # Old stub-based top-level DTS (reference)
+│   ├── esp32c3_generated.repl             # Old stub-based generated REPL (reference)
+│   ├── esp32c3_generated_offline.repl     # Old offline REPL (reference)
+│   ├── generate_repl.sh                   # Script to regenerate REPLs from Zephyr
+│   ├── include/                           # Stub Zephyr headers (reference)
+│   └── setup.resc                         # Simulation startup script
 ├── diagram.json            # Wokwi wiring diagram
 ├── wokwi.toml              # Wokwi firmware selection
 ├── note.md                 # Developer scratch notes
@@ -133,15 +161,18 @@ cargo test --test test_sum  # integration tests
 
 ## Start the simulation
 
+Build the firmware first, then run Renode from the `sim/` directory:
+
 ```bash
-cd sim
+cd firmware-c && pio run
+cd ../sim
 renode setup.resc
 ```
 
 [sim/setup.resc](sim/setup.resc) performs the following steps:
 
 1. Creates a machine named `esp32-c3`.
-2. Loads the platform description from [sim/esp32c3.repl](sim/esp32c3.repl) (CPU, flash, RAM, UART).
+2. Loads the platform description from [sim/esp32c3_devkitm_generated_offline.repl](sim/esp32c3_devkitm_generated_offline.repl). This REPL is generated from the official Zephyr ESP32-C3-DevKitM device tree using [dts2repl](https://github.com/antmicro/dts2repl); see [repl_guide.md](repl_guide.md) for details.
 3. Loads the firmware ELF configured by `$bin?`.
 4. Opens the UART analyzer window.
 5. Starts a GDB server on `localhost:3333`.
@@ -149,8 +180,10 @@ renode setup.resc
 By default the script loads the C firmware. To switch to the Rust firmware, comment out the C line and uncomment the Rust line in [sim/setup.resc](sim/setup.resc):
 
 ```renode
-$bin?=@${ORIGIN}/../firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust
+$bin?=@../firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust
 ```
+
+[sim/setup.resc](sim/setup.resc) uses relative paths, so it must be started from the `sim/` directory.
 
 ## Debug with GDB
 
@@ -181,21 +214,31 @@ Typical GDB workflow:
 
 Because Renode starts the GDB server before emulation begins, use `monitor start` or start emulation from the Renode monitor to run the CPU.
 
+# Detailed guides
+
+For command-level details, see the focused guides:
+
+- [PlatformIO workflow](pio_guide.md) — build, upload, and test the C firmware.
+- [REPL generation](repl_guide.md) — generate the Renode platform description from device tree.
+- [Renode workflow](renode_guide.md) — start emulation, attach GDB, and run tests in simulation.
+- [Wokwi workflow](wokwi_guide.md) — visual simulation, wiring, and firmware selection.
+- [Simulation overview](sim_guide.md) — when to use Wokwi vs Renode and how they fit together.
+
 # Current status and next steps
 
-See [task-plan.md](task-plan.md) for the full milestone checklist. The completed items so far are:
+See [task-plan.md](task-plan.md) for the full milestone checklist.
+
+Completed:
 
 - [x] Dev container with Renode, PlatformIO, and Rust installed.
 - [x] C firmware builds with PlatformIO and prints/blinks on GPIO8.
 - [x] Rust firmware builds with `cargo build --release` and prints/blinks on GPIO8.
 - [x] Renode platform description and startup script created.
 - [x] Wokwi diagram and configuration created.
-
-Completed:
-
-- [x] Add `.vscode/tasks.json` for one-click build/simulate/test tasks.
-- [x] Add `.vscode/launch.json` for GDB attach from VS Code.
-- [x] Add unit tests for a basic `sum` library in both C and Rust.
+- [x] `.vscode/tasks.json` for one-click build/simulate/test tasks.
+- [x] `.vscode/launch.json` for GDB attach from VS Code.
+- [x] Unit tests for a basic `sum` library in both C and Rust.
+- [x] Documentation split into focused guides under `docs/`.
 
 Still pending:
 
