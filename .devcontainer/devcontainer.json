@@ -1,5 +1,5 @@
 {
-  "name": "ESP32-C3 Renode Hybrid Dev",
+  "name": "ESP32-C3 + STM32F103 Embedded Dev",
   "build": {
     "dockerfile": "Dockerfile"
   },

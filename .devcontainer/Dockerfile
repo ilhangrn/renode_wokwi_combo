@@ -2,12 +2,16 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install dependencies for PlatformIO, Rust, and Renode
+# Install dependencies for PlatformIO, Rust, Renode, and ARM cross-compilation
 RUN apt-get update && apt-get install -y \
     ca-certificates curl git python3 python3-pip python3-venv build-essential \
+    gcc-arm-none-eabi gdb-multiarch \
     libglib2.0-0 libpixman-1-0 libgtk-3-0 libnss3 libx11-6 libxrender1 libxext6 \
     xz-utils \
     && rm -rf /var/lib/apt/lists/*
+
+# Provide a conventional ARM GDB binary name for VS Code launch configs
+RUN ln -sf /usr/bin/gdb-multiarch /usr/local/bin/arm-none-eabi-gdb
 
 # Install Renode portable package
 RUN curl -fsSL -o renode.tar.gz https://github.com/renode/renode/releases/download/v1.16.1/renode-1.16.1.linux-arm64-portable-dotnet.tar.gz \
@@ -33,4 +37,4 @@ ENV RUSTUP_HOME=/root/.rustup
 ENV PATH="${CARGO_HOME}/bin:${PATH}"
 
 # Add the targets using the absolute toolchain environment explicitly
-RUN . /root/.cargo/env && rustup target add riscv32imac-unknown-none-elf
+RUN . /root/.cargo/env && rustup target add riscv32imac-unknown-none-elf thumbv7m-none-eabi

@@ -1,0 +1,16 @@
+using sysbus
+
+mach create "stm32f103_bluepill"
+machine LoadPlatformDescription @platforms/boards/stm32f103_bluepill.repl
+
+# Select the firmware to load. Uncomment the Rust line to use the Rust binary.
+$bin?=@../../firmware-c/.pio/build/stm32f103_bluepill/firmware.elf
+; $bin?=@../../firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103
+
+sysbus LoadELF @$bin
+cpu VectorTableOffset `sysbus GetSymbolAddress "Reset_Handler"`
+
+showAnalyzer sysbus.usart1
+
+gdbPort 3333
+start

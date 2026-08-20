@@ -1,5 +1,11 @@
+#include <Arduino.h>
 #include <unity.h>
 #include "../src/math/sum.h"
+
+extern "C" void unity_output_char(char c)
+{
+    Serial.write(c);
+}
 
 void test_sum_positive_numbers(void)
 {
@@ -23,6 +29,7 @@ void test_sum_commutative(void)
 
 void setup()
 {
+    Serial.begin(115200);
     UNITY_BEGIN();
     RUN_TEST(test_sum_positive_numbers);
     RUN_TEST(test_sum_negative_numbers);

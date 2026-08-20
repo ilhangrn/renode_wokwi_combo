@@ -2,17 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug C Firmware in Renode",
+            "name": "Debug STM32 C Firmware in Renode",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/firmware-c/.pio/build/esp32-c3-devkitm-1/firmware.elf",
+            "program": "${workspaceFolder}/firmware-c/.pio/build/stm32f103_bluepill/firmware.elf",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/firmware-c",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/root/.platformio/packages/toolchain-riscv32-esp/bin/riscv32-esp-elf-gdb",
+            "miDebuggerPath": "/usr/local/bin/arm-none-eabi-gdb",
             "miDebuggerServerAddress": "localhost:3333",
             "setupCommands": [
                 {
@@ -21,31 +21,26 @@
                     "ignoreFailures": true
                 },
                 {
-                    "description": "Set architecture to RISC-V",
-                    "text": "set architecture riscv:rv32",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Start Renode emulation after attach",
-                    "text": "monitor start",
+                    "description": "Set architecture to ARM Thumb",
+                    "text": "set architecture arm",
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Start Renode Simulation (C)",
+            "preLaunchTask": "Start Renode Simulation (STM32 C)",
             "postDebugTask": "Stop Renode"
         },
         {
-            "name": "Debug Rust Firmware in Renode",
+            "name": "Debug STM32 Rust Firmware in Renode",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust",
+            "program": "${workspaceFolder}/firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/firmware-rust",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/root/.platformio/packages/toolchain-riscv32-esp/bin/riscv32-esp-elf-gdb",
+            "miDebuggerPath": "/usr/local/bin/arm-none-eabi-gdb",
             "miDebuggerServerAddress": "localhost:3333",
             "setupCommands": [
                 {
@@ -54,17 +49,12 @@
                     "ignoreFailures": true
                 },
                 {
-                    "description": "Set architecture to RISC-V",
-                    "text": "set architecture riscv:rv32",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Start Renode emulation after attach",
-                    "text": "monitor start",
+                    "description": "Set architecture to ARM Thumb",
+                    "text": "set architecture arm",
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Start Renode Simulation (Rust)",
+            "preLaunchTask": "Start Renode Simulation (STM32 Rust)",
             "postDebugTask": "Stop Renode"
         }
     ]

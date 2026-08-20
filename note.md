@@ -1,5 +1,17 @@
 # Notes
 
+## Boards and simulation
+
+- Physical ESP32 board: **Freenove Wrover v3** (ESP32-based).
+- Renode does not support the Freenove Wrover v3 / ESP32-C3, so the ESP32 target uses **Wokwi** only.
+- **STM32F103 Blue Pill** is now supported:
+  - C firmware: `firmware-c/src/main_stm32f103.cpp`
+  - Rust firmware: `firmware-rust/src/main_stm32f103.rs`
+  - Wokwi diagram: `wokwi/stm32f103/diagram.json`
+  - Renode script: `sim/stm32f103_bluepill/setup.resc`
+- Renode is used for **STM32F103** deterministic emulation and GDB debugging.
+- Build files have been restructured with board-specific source files and Cargo features.
+
 ## To edit diagram
 - Open it in another vscode, not in this container. Wokwi will stop you.
 

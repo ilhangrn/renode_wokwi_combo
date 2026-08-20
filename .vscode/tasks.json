@@ -2,11 +2,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build C Firmware",
+            "label": "Build C Firmware (ESP32-C3)",
             "type": "shell",
             "command": "pio",
             "args": [
-                "run"
+                "run",
+                "-e",
+                "esp32-c3-devkitm-1"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/firmware-c"
@@ -21,12 +23,36 @@
             "detail": "Build the ESP32-C3 C/Arduino firmware with PlatformIO"
         },
         {
-            "label": "Build Rust Firmware",
+            "label": "Build C Firmware (STM32F103)",
+            "type": "shell",
+            "command": "pio",
+            "args": [
+                "run",
+                "-e",
+                "stm32f103_bluepill"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/firmware-c"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$platformio"
+            ],
+            "detail": "Build the STM32F103 Blue Pill C/Arduino firmware with PlatformIO"
+        },
+        {
+            "label": "Build Rust Firmware (ESP32-C3)",
             "type": "shell",
             "command": "cargo",
             "args": [
                 "build",
-                "--release"
+                "--release",
+                "--target",
+                "riscv32imac-unknown-none-elf",
+                "--features",
+                "esp32c3",
+                "--bin",
+                "firmware-rust-esp32c3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/firmware-rust"
@@ -38,14 +64,37 @@
             "detail": "Build the ESP32-C3 Rust firmware with cargo"
         },
         {
-            "label": "Start Renode Simulation (C)",
+            "label": "Build Rust Firmware (STM32F103)",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "build",
+                "--release",
+                "--target",
+                "thumbv7m-none-eabi",
+                "--features",
+                "stm32f103",
+                "--bin",
+                "firmware-rust-stm32f103"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/firmware-rust"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "detail": "Build the STM32F103 Blue Pill Rust firmware with cargo"
+        },
+        {
+            "label": "Start Renode Simulation (STM32 C)",
             "type": "shell",
             "command": "renode",
             "args": [
                 "setup.resc"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/sim"
+                "cwd": "${workspaceFolder}/sim/stm32f103_bluepill"
             },
             "isBackground": true,
             "problemMatcher": {
@@ -60,17 +109,17 @@
                     "endsPattern": "^Simulation configured.*|^.*GDB server.*started.*"
                 }
             },
-            "detail": "Start Renode with the C firmware and wait for GDB attach"
+            "detail": "Start Renode with the STM32 C firmware and wait for GDB attach"
         },
         {
-            "label": "Start Renode Simulation (Rust)",
+            "label": "Start Renode Simulation (STM32 Rust)",
             "type": "shell",
             "command": "renode",
             "args": [
                 "setup.resc"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/sim",
+                "cwd": "${workspaceFolder}/sim/stm32f103_bluepill",
                 "env": {
                     "RENODE_FW": "rust"
                 }
@@ -88,7 +137,7 @@
                     "endsPattern": "^Simulation configured.*|^.*GDB server.*started.*"
                 }
             },
-            "detail": "Start Renode with the Rust firmware and wait for GDB attach"
+            "detail": "Start Renode with the STM32 Rust firmware and wait for GDB attach"
         },
         {
             "label": "Stop Renode",
@@ -125,11 +174,13 @@
             "detail": "Compile and run host-side C tests for sum"
         },
         {
-            "label": "Test C Target",
+            "label": "Test C Target (ESP32-C3)",
             "type": "shell",
             "command": "pio",
             "args": [
-                "test"
+                "test",
+                "-e",
+                "esp32-c3-devkitm-1"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/firmware-c"
@@ -139,6 +190,24 @@
                 "$platformio"
             ],
             "detail": "Run Unity tests on the ESP32-C3 target"
+        },
+        {
+            "label": "Test C Target (STM32F103)",
+            "type": "shell",
+            "command": "pio",
+            "args": [
+                "test",
+                "-e",
+                "stm32f103_bluepill"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/firmware-c"
+            },
+            "group": "test",
+            "problemMatcher": [
+                "$platformio"
+            ],
+            "detail": "Run Unity tests on the STM32F103 Blue Pill target"
         },
         {
             "label": "Test Rust Host",

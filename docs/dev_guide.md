@@ -1,12 +1,21 @@
 # Goal
-This is a learning project for embedded coding, tools, and simulation workflows. The current target is the **ESP32-C3** (RISC-V core) on the **ESP32-C3-DevKitM-1** board.
+
+This is a learning project for embedded coding, tools, and simulation workflows. It supports two boards:
+
+- **ESP32-C3-DevKitM-1** (RISC-V core) — simulated with **Wokwi** only.
+- **STM32F103 Blue Pill** (ARM Cortex-M3) — simulated with **Wokwi** and **Renode**.
+
+The physical ESP32 board available is the **Freenove Wrover v3**, which is **not supported by Renode**, so the ESP32 target does not use Renode. The STM32F103 Blue Pill is supported by Renode and is used to demonstrate deterministic machine emulation and GDB debugging.
 
 We keep two parallel firmware implementations:
 
 - **firmware-c/** — Arduino-style C++ firmware built with PlatformIO.
-- **firmware-rust/** — Bare-metal Rust firmware built with `esp-hal`.
+- **firmware-rust/** — Bare-metal Rust firmware built with board-specific HALs (`esp-hal` for ESP32-C3, `stm32f1xx-hal` for STM32F103).
 
-Both firmwares blink the LED on **GPIO8** and print a heartbeat message over UART.
+Each firmware blinks an on-board LED and prints a heartbeat message over UART:
+
+- **ESP32-C3:** LED on **GPIO8**.
+- **STM32F103:** LED on **PC13**.
 
 # Structure
 
@@ -18,44 +27,43 @@ demo_renode/
 ├── docs/                   # Guides and documentation
 │   ├── dev_guide.md        # This file
 │   ├── pio_guide.md        # PlatformIO commands and tests
-│   ├── repl_guide.md       # REPL generation from device tree
+│   ├── repl_guide.md       # REPL generation from device tree (archived ESP32-C3 reference)
 │   ├── renode_guide.md     # Renode simulation and GDB debug
 │   ├── sim_guide.md        # Simulation workflow overview
 │   └── wokwi_guide.md      # Wokwi visual simulation
 ├── firmware-c/             # C/Arduino firmware (PlatformIO)
 │   ├── platformio.ini
 │   ├── src/
-│   │   ├── main.cpp
+│   │   ├── main_esp32c3.cpp
+│   │   ├── main_stm32f103.cpp
 │   │   └── math/
 │   │       ├── sum.c
 │   │       └── sum.h
 │   └── test/
 │       ├── desktop_test_sum.c
 │       └── test_sum.cpp
-├── firmware-rust/          # Rust firmware (esp-hal)
+├── firmware-rust/          # Rust firmware (board-specific HALs)
 │   ├── Cargo.toml
+│   ├── .cargo/
+│   │   └── config.toml
 │   ├── src/
 │   │   ├── lib.rs
-│   │   ├── main.rs
+│   │   ├── main_esp32c3.rs
+│   │   ├── main_stm32f103.rs
 │   │   └── math/
 │   │       └── mod.rs
 │   └── tests/
 │       └── test_sum.rs
 ├── sim/                                   # Renode simulation scripts
-│   ├── esp32c3_devkitm.dts                # Project top-level DTS (Zephyr)
-│   ├── esp32c3_devkitm_flat.dts           # Flattened DTS
-│   ├── esp32c3_devkitm_generated.repl     # dts2repl output (with remote ROM/SVD)
-│   ├── esp32c3_devkitm_generated_offline.repl # Offline-friendly REPL (used)
-│   ├── esp32c3.repl                       # Legacy hand-written platform description
-│   ├── esp32c3_common.dtsi                # Zephyr device-tree source (reference)
-│   ├── esp32c3.dts                        # Old stub-based top-level DTS (reference)
-│   ├── esp32c3_generated.repl             # Old stub-based generated REPL (reference)
-│   ├── esp32c3_generated_offline.repl     # Old offline REPL (reference)
-│   ├── generate_repl.sh                   # Script to regenerate REPLs from Zephyr
-│   ├── include/                           # Stub Zephyr headers (reference)
-│   └── setup.resc                         # Simulation startup script
-├── diagram.json            # Wokwi wiring diagram
-├── wokwi.toml              # Wokwi firmware selection
+│   └── stm32f103_bluepill/                # STM32F103 Blue Pill setup
+│       └── setup.resc
+├── wokwi/                                 # Wokwi diagrams and firmware selection
+│   ├── esp32c3/                           # ESP32-C3-DevKitM-1 diagram
+│   │   ├── diagram.json
+│   │   └── wokwi.toml
+│   └── stm32f103/                         # STM32F103 Blue Pill diagram
+│       ├── diagram.json
+│       └── wokwi.toml
 ├── note.md                 # Developer scratch notes
 └── task-plan.md            # Project milestones and TODOs
 ```
@@ -68,59 +76,99 @@ This project is designed to run inside the provided VS Code Dev Container.
 2. Run **Dev Containers: Reopen in Container**.
 3. Wait for the container build; it installs:
    - PlatformIO Core (`pio`)
-   - Rust toolchain with `riscv32imac-unknown-none-elf` target
+   - Rust toolchain with `riscv32imac-unknown-none-elf` and `thumbv7m-none-eabi` targets
    - Renode portable package (`renode`)
+   - ARM cross-compiler (`gcc-arm-none-eabi`) and GDB (`gdb-multiarch`)
    - VS Code extensions for PlatformIO, Rust, Renode, and Wokwi
 
 # Build the firmware
 
 ## C version (PlatformIO)
 
+Both board environments are defined in [firmware-c/platformio.ini](firmware-c/platformio.ini). Build one or both:
+
 ```bash
 cd firmware-c
-pio run
+pio run -e esp32-c3-devkitm-1
+pio run -e stm32f103_bluepill
 ```
 
-Output ELF:
+Output ELFs:
 
 ```
 firmware-c/.pio/build/esp32-c3-devkitm-1/firmware.elf
+firmware-c/.pio/build/stm32f103_bluepill/firmware.elf
 ```
 
-The C firmware uses the Arduino framework, configures GPIO8 as an output, and toggles the LED every second while logging the pin state to UART.
+The C firmware uses the Arduino framework, configures the board LED as an output, and toggles it every second while logging the pin state to UART.
 
-## Rust version (esp-hal)
+## Rust version
+
+The Rust crate uses Cargo features to select the board HAL. Build one or both:
 
 ```bash
 cd firmware-rust
-cargo build --release
+
+# ESP32-C3
+cargo build --release --target riscv32imac-unknown-none-elf --features esp32c3 --bin firmware-rust-esp32c3
+
+# STM32F103
+cargo build --release --target thumbv7m-none-eabi --features stm32f103 --bin firmware-rust-stm32f103
 ```
 
-Output ELF:
+Output ELFs:
 
 ```
-firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust
+firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust-esp32c3
+firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103
 ```
-
-The Rust firmware uses `esp-hal` with `#![no_std]` and `#![no_main]`, toggles GPIO8, and prints the LED state every second.
 
 # Simulate with Wokwi
 
-[Wokwi](https://wokwi.com) provides a browser/visual simulation of the ESP32-C3 and the LED.
+[Wokwi](https://wokwi.com) provides a browser/visual simulation for both boards. Board-specific diagrams and firmware selectors live under [wokwi/](wokwi/).
 
-1. Make sure [wokwi.toml](wokwi.toml) points to the firmware you want to simulate:
+## ESP32-C3
 
-   - **C:** set `firmware` and `elf` to `firmware-c/.pio/build/esp32-c3-devkitm-1/firmware.elf`.
-   - **Rust:** set them to `firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust`.
-
-2. Open [diagram.json](diagram.json) in VS Code with the Wokwi extension (or use the **Wokwi: Start Simulator** command).
+1. Make sure [wokwi/esp32c3/wokwi.toml](wokwi/esp32c3/wokwi.toml) points to the firmware you want to simulate.
+2. Open [wokwi/esp32c3/diagram.json](wokwi/esp32c3/diagram.json) in VS Code and start the Wokwi simulator.
 3. Observe the LED blinking on GPIO8 and the serial monitor output.
 
-Wiring in [diagram.json](diagram.json):
+## STM32F103 Blue Pill
 
-- `esp:8` → LED anode (red)
-- `esp:GND.1` → LED cathode (black)
-- `esp:TX` / `esp:RX` → serial monitor
+1. Make sure [wokwi/stm32f103/wokwi.toml](wokwi/stm32f103/wokwi.toml) points to the firmware you want to simulate.
+2. Open [wokwi/stm32f103/diagram.json](wokwi/stm32f103/diagram.json) in VS Code and start the Wokwi simulator.
+3. Observe the LED blinking on PC13 and the serial monitor output.
+
+See [wokwi_guide.md](wokwi_guide.md) for full wiring details.
+
+# Simulate with Renode
+
+[Renode](https://renode.io) provides deterministic machine emulation with a GDB server. It is used for the **STM32F103 Blue Pill** only.
+
+Build the firmware first, then start Renode from the STM32 simulation directory:
+
+```bash
+cd firmware-c && pio run -e stm32f103_bluepill
+cd ../sim/stm32f103_bluepill
+renode setup.resc
+```
+
+[sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) loads the Renode platform description, loads the selected firmware ELF, opens the USART1 analyzer, starts a GDB server on `localhost:3333`, and begins emulation.
+
+By default the script loads the C firmware. To switch to the Rust firmware, edit the `$bin?` line in [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc):
+
+```renode
+$bin?=@../../firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103
+```
+
+Attach with the ARM GDB binary:
+
+```bash
+arm-none-eabi-gdb -ex "target remote localhost:3333" \
+  firmware-c/.pio/build/stm32f103_bluepill/firmware.elf
+```
+
+See [renode_guide.md](renode_guide.md) for full details.
 
 # Testing
 
@@ -136,11 +184,12 @@ gcc desktop_test_sum.c ../src/math/sum.c -I../src -o desktop_test_sum
 ./desktop_test_sum
 ```
 
-Target test runner (Unity on the ESP32-C3):
+Target test runner (Unity) per board:
 
 ```bash
 cd firmware-c
-pio test
+pio test -e esp32-c3-devkitm-1
+pio test -e stm32f103_bluepill
 ```
 
 The Unity test file is [firmware-c/test/test_sum.cpp](firmware-c/test/test_sum.cpp).
@@ -155,74 +204,15 @@ cargo test --lib      # unit tests
 cargo test --test test_sum  # integration tests
 ```
 
-# Simulate with Renode
-
-[Renode](https://renode.io) provides deterministic machine emulation with a GDB server for debugging.
-
-## Start the simulation
-
-Build the firmware first, then run Renode from the `sim/` directory:
-
-```bash
-cd firmware-c && pio run
-cd ../sim
-renode setup.resc
-```
-
-[sim/setup.resc](sim/setup.resc) performs the following steps:
-
-1. Creates a machine named `esp32-c3`.
-2. Loads the platform description from [sim/esp32c3_devkitm_generated_offline.repl](sim/esp32c3_devkitm_generated_offline.repl). This REPL is generated from the official Zephyr ESP32-C3-DevKitM device tree using [dts2repl](https://github.com/antmicro/dts2repl); see [repl_guide.md](repl_guide.md) for details.
-3. Loads the firmware ELF configured by `$bin?`.
-4. Opens the UART analyzer window.
-5. Starts a GDB server on `localhost:3333`.
-
-By default the script loads the C firmware. To switch to the Rust firmware, comment out the C line and uncomment the Rust line in [sim/setup.resc](sim/setup.resc):
-
-```renode
-$bin?=@../firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust
-```
-
-[sim/setup.resc](sim/setup.resc) uses relative paths, so it must be started from the `sim/` directory.
-
-## Debug with GDB
-
-Attach with a RISC-V GDB binary, for example:
-
-```bash
-riscv32-esp-elf-gdb -ex "target remote localhost:3333" \
-  firmware-c/.pio/build/esp32-c3-devkitm-1/firmware.elf
-```
-
-or for Rust:
-
-```bash
-riscv32-esp-elf-gdb -ex "target remote localhost:3333" \
-  firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust
-```
-
-Typical GDB workflow:
-
-```gdb
-(gdb) monitor start
-(gdb) load
-(gdb) break main
-(gdb) continue
-(gdb) step
-(gdb) info registers
-```
-
-Because Renode starts the GDB server before emulation begins, use `monitor start` or start emulation from the Renode monitor to run the CPU.
-
 # Detailed guides
 
 For command-level details, see the focused guides:
 
 - [PlatformIO workflow](pio_guide.md) — build, upload, and test the C firmware.
-- [REPL generation](repl_guide.md) — generate the Renode platform description from device tree.
-- [Renode workflow](renode_guide.md) — start emulation, attach GDB, and run tests in simulation.
 - [Wokwi workflow](wokwi_guide.md) — visual simulation, wiring, and firmware selection.
 - [Simulation overview](sim_guide.md) — when to use Wokwi vs Renode and how they fit together.
+- [Renode workflow](renode_guide.md) — start emulation, attach GDB, and run tests for STM32F103.
+- [REPL generation](repl_guide.md) — archived; REPL generation for the previous ESP32-C3 Renode setup.
 
 # Current status and next steps
 
@@ -230,56 +220,74 @@ See [task-plan.md](task-plan.md) for the full milestone checklist.
 
 Completed:
 
-- [x] Dev container with Renode, PlatformIO, and Rust installed.
-- [x] C firmware builds with PlatformIO and prints/blinks on GPIO8.
-- [x] Rust firmware builds with `cargo build --release` and prints/blinks on GPIO8.
-- [x] Renode platform description and startup script created.
-- [x] Wokwi diagram and configuration created.
+- [x] Dev container with PlatformIO, Rust, Renode, and ARM toolchain installed.
+- [x] C firmware builds for ESP32-C3 and STM32F103 with PlatformIO.
+- [x] Rust firmware builds for ESP32-C3 and STM32F103 with cargo.
+- [x] Wokwi diagrams and configurations for both boards.
+- [x] Renode simulation script for STM32F103 Blue Pill.
 - [x] `.vscode/tasks.json` for one-click build/simulate/test tasks.
-- [x] `.vscode/launch.json` for GDB attach from VS Code.
+- [x] `.vscode/launch.json` for STM32 GDB attach from VS Code.
 - [x] Unit tests for a basic `sum` library in both C and Rust.
 - [x] Documentation split into focused guides under `docs/`.
 
 Still pending:
 
-- [ ] Validate end-to-end debug flow with breakpoints and stepping.
-- [ ] Add CI workflow for headless build and simulation checks.
+- [ ] Validate end-to-end Wokwi simulation flow for both boards.
+- [ ] Validate end-to-end Renode debug flow for STM32F103.
+- [ ] Add CI workflow for build and simulation checks.
 
 # Learning milestones
 
-For first projects we use an ESP32-C3 target; later versions may target STM32, Raspberry Pi, or other devices.
-
 ## Hello world with Wokwi
 
-### C version
+### ESP32-C3 C version
 
-- Build: `cd firmware-c && pio run`
-- Point [wokwi.toml](wokwi.toml) to the C ELF.
-- Start Wokwi simulator from [diagram.json](diagram.json).
+- Build: `cd firmware-c && pio run -e esp32-c3-devkitm-1`
+- Point [wokwi/esp32c3/wokwi.toml](wokwi/esp32c3/wokwi.toml) to the C ELF.
+- Start Wokwi simulator from [wokwi/esp32c3/diagram.json](wokwi/esp32c3/diagram.json).
 - Expected output: red LED on GPIO8 blinks once per second; serial monitor shows `Blink C loop executed...`.
 
-### Rust version
+### ESP32-C3 Rust version
 
-- Build: `cd firmware-rust && cargo build --release`
-- Point [wokwi.toml](wokwi.toml) to the Rust ELF.
-- Start Wokwi simulator from [diagram.json](diagram.json).
+- Build: `cd firmware-rust && cargo build --release --target riscv32imac-unknown-none-elf --features esp32c3 --bin firmware-rust-esp32c3`
+- Point [wokwi/esp32c3/wokwi.toml](wokwi/esp32c3/wokwi.toml) to the Rust ELF.
+- Start Wokwi simulator from [wokwi/esp32c3/diagram.json](wokwi/esp32c3/diagram.json).
 - Expected output: red LED on GPIO8 blinks once per second; serial monitor shows `Blink Rust loop executed...`.
 
-## Hello world with Renode
+### STM32F103 C version
+
+- Build: `cd firmware-c && pio run -e stm32f103_bluepill`
+- Point [wokwi/stm32f103/wokwi.toml](wokwi/stm32f103/wokwi.toml) to the C ELF.
+- Start Wokwi simulator from [wokwi/stm32f103/diagram.json](wokwi/stm32f103/diagram.json).
+- Expected output: red LED on PC13 blinks once per second; serial monitor shows `Blink STM32 loop executed...`.
+
+### STM32F103 Rust version
+
+- Build: `cd firmware-rust && cargo build --release --target thumbv7m-none-eabi --features stm32f103 --bin firmware-rust-stm32f103`
+- Point [wokwi/stm32f103/wokwi.toml](wokwi/stm32f103/wokwi.toml) to the Rust ELF.
+- Start Wokwi simulator from [wokwi/stm32f103/diagram.json](wokwi/stm32f103/diagram.json).
+- Expected output: red LED on PC13 blinks once per second; serial monitor shows `Blink STM32 loop executed...`.
+
+## Hello world with Renode (STM32F103 only)
 
 ### C version
 
-- Build: `cd firmware-c && pio run`
-- Ensure [sim/setup.resc](sim/setup.resc) points to the C ELF.
-- Run: `cd sim && renode setup.resc`
-- Attach GDB to `localhost:3333`, set breakpoints in `setup`/`loop`, and continue.
-- Expected output: UART analyzer shows `Hello from ESP32-C3 C Firmware!` and loop messages.
+- Build: `cd firmware-c && pio run -e stm32f103_bluepill`
+- Ensure [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) points to the C ELF.
+- Run: `cd sim/stm32f103_bluepill && renode setup.resc`
+- Attach GDB to `localhost:3333` and debug.
+- Expected output: USART1 analyzer shows `Hello from STM32F103 C Firmware!` and loop messages.
 
 ### Rust version
 
-- Build: `cd firmware-rust && cargo build --release`
-- Edit [sim/setup.resc](sim/setup.resc) to use the Rust release ELF.
-- Run: `cd sim && renode setup.resc`
+- Build: `cd firmware-rust && cargo build --release --target thumbv7m-none-eabi --features stm32f103 --bin firmware-rust-stm32f103`
+- Edit [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) to use the Rust ELF.
+- Run: `cd sim/stm32f103_bluepill && renode setup.resc`
 - Attach GDB to `localhost:3333` and debug.
-- Expected output: UART analyzer shows `Hello from ESP32-C3 Rust Firmware!` and loop messages.
+- Expected output: USART1 analyzer shows `Hello from STM32F103 Rust Firmware!` and loop messages.
+
+## Notes
+
+- The ESP32-C3 target is **not** supported by Renode; use Wokwi for visual simulation.
+- The archived ESP32-C3 Renode reference (from an earlier version of this project) remains in [renode_guide.md](renode_guide.md) and [repl_guide.md](repl_guide.md) for reference.
 

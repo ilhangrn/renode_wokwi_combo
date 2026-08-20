@@ -1,9 +1,0 @@
-# [wokwi]
-# version = 1
-# firmware = "firmware-c/.pio/build/esp32-c3-devkitm-1/firmware.elf"
-# elf = "firmware-c/.pio/build/esp32-c3-devkitm-1/firmware.elf"
-
-[wokwi]
-version = 1
-firmware = "firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust"
-elf = "firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust"

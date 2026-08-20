@@ -1,6 +1,8 @@
 # REPL Generation Guide
 
-Some boards do not ship with a ready-to-use Renode `.repl` platform description. This project uses [dts2repl](https://github.com/antmicro/dts2repl) to generate a REPL file from the official Zephyr device-tree sources for the **ESP32-C3-DevKitM** board.
+> **Status: archived / future use.** This guide documents how the previous ESP32-C3 Renode platform description was generated. The current STM32F103 Blue Pill setup uses Renode's built-in platform description (`platforms/boards/stm32f103_bluepill.repl`), so no custom REPL generation is required. The ESP32-C3-DevKitM-1 board is **not supported by Renode**, so no REPL generation is performed for it. These instructions remain useful as a reference for future boards that need custom Renode platform descriptions.
+
+Some boards do not ship with a ready-to-use Renode `.repl` platform description. The archived ESP32-C3 setup used [dts2repl](https://github.com/antmicro/dts2repl) to generate a REPL file from the official Zephyr device-tree sources for the **ESP32-C3-DevKitM** board.
 
 ## Files
 
