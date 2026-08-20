@@ -1,0 +1,16 @@
+{
+  "name": "ESP32-C3 + STM32F103 Embedded Dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "platformio.platformio-ide",
+        "rust-lang.rust-analyzer",
+        "antmicro.renode",
+        "Wokwi.wokwi-vscode"
+      ]
+    }
+  }
+}

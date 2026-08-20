@@ -1,0 +1,61 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug STM32 C Firmware in Renode",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/firmware-c/.pio/build/stm32f103_bluepill/firmware.elf",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/firmware-c",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/local/bin/arm-none-eabi-gdb",
+            "miDebuggerServerAddress": "localhost:3333",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set architecture to ARM Thumb",
+                    "text": "set architecture arm",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Start Renode Simulation (STM32 C)",
+            "postDebugTask": "Stop Renode"
+        },
+        {
+            "name": "Debug STM32 Rust Firmware in Renode",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/firmware-rust",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/local/bin/arm-none-eabi-gdb",
+            "miDebuggerServerAddress": "localhost:3333",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set architecture to ARM Thumb",
+                    "text": "set architecture arm",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Start Renode Simulation (STM32 Rust)",
+            "postDebugTask": "Stop Renode"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+[target.riscv32imac-unknown-none-elf]
+rustflags = [
+    "-C", "link-arg=-Tlinkall.x",
+    "-C", "force-frame-pointers",
+]
+
+[target.thumbv7m-none-eabi]
+rustflags = [
+    "-C", "link-arg=-Llinker/stm32f103",
+    "-C", "link-arg=-Tlink.x",
+]
+
+[build]
+# No default target; select the board target on the command line or in VS Code tasks.
+# target = "riscv32imac-unknown-none-elf"

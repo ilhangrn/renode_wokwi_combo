@@ -1,0 +1,53 @@
+{
+    "version": 1,
+    "author": "DevContainer",
+    "editor": "wokwi",
+    "parts": [
+        {
+            "type": "wokwi-led",
+            "id": "led1",
+            "top": -50,
+            "left": 50,
+            "attrs": {
+                "color": "red"
+            }
+        },
+        {
+            "type": "board-stm32-bluepill",
+            "id": "stm",
+            "top": 0,
+            "left": 0,
+            "attrs": {}
+        }
+    ],
+    "connections": [
+        [
+            "stm:PA9",
+            "$serialMonitor:RX",
+            "",
+            []
+        ],
+        [
+            "stm:PA10",
+            "$serialMonitor:TX",
+            "",
+            []
+        ],
+        [
+            "stm:PC13",
+            "led1:A",
+            "green",
+            [
+                "v0"
+            ]
+        ],
+        [
+            "stm:GND.1",
+            "led1:C",
+            "black",
+            [
+                "v0"
+            ]
+        ]
+    ]
+}
