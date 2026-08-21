@@ -38,17 +38,17 @@ fn main() -> ! {
     let mut delay = cortex_m::delay::Delay::new(cp.SYST, clocks.sysclk().raw());
 
     use core::fmt::Write;
-    writeln!(tx, "Hello from STM32F103 Rust Firmware!").unwrap();
+    write!(tx, "Hello from STM32F103 Rust Firmware!\r\n").unwrap();
     let demo = sum(10, 32);
-    writeln!(tx, "sum(10, 32) = {}", demo).unwrap();
+    write!(tx, "sum(10, 32) = {}\r\n", demo).unwrap();
 
     loop {
         led.set_high();
-        writeln!(tx, "Blink STM32 loop executed. Pin PC13 state: 1").unwrap();
+        write!(tx, "Blink STM32 loop executed. Pin PC13 state: 1\r\n").unwrap();
         delay.delay_ms(1000);
 
         led.set_low();
-        writeln!(tx, "Blink STM32 loop executed. Pin PC13 state: 0").unwrap();
+        write!(tx, "Blink STM32 loop executed. Pin PC13 state: 0\r\n").unwrap();
         delay.delay_ms(1000);
     }
 }

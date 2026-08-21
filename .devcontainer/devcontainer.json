@@ -3,6 +3,16 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "forwardPorts": [
+    3333
+  ],
+  "portsAttributes": {
+    "3333": {
+      "label": "Renode GDB Server",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "bash -lc 'command -v arm-none-eabi-gdb >/dev/null 2>&1 || ln -sf /usr/bin/gdb-multiarch /usr/local/bin/arm-none-eabi-gdb'",
   "customizations": {
     "vscode": {
       "extensions": [
