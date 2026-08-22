@@ -7,6 +7,9 @@ mach create "stm32f103_bluepill"
 # 3. Load Renode's built-in STM32F103 peripheral description
 machine LoadPlatformDescription @platforms/cpus/stm32f103.repl
 
+# Both firmware tracks use the 8 MHz HSI clock; the built-in platform defaults SysTick to 72 MHz.
+nvic Frequency 8000000
+
 # 4. Correctly map the Blue Pill's physical onboard LED (PC13)
 machine LoadPlatformDescriptionFromString "led: Miscellaneous.LED @ gpioPortC 13"
 
@@ -21,15 +24,17 @@ sysbus LoadELF $bin
 cpu VectorTableOffset 0x08000000
 # cpu PC `sysbus ReadDoubleWord 0x08000004`
 # cpu SP `sysbus ReadDoubleWord 0x08000000`
+#cpu PC `sysbus ReadDoubleWord 0x08000004`
+#cpu SP `sysbus ReadDoubleWord 0x08000000`
 
 
 # 8. Open the Serial Monitor analyzer window (or falling back to console view)
 showAnalyzer sysbus.usart1
 
 # 9. Bind a GDB network debugging server (e.g., for VSCode or terminal GDB)
-machine StartGdbServer 3333
+# machine StartGdbServer 3333
 # sysbus LogAllPeripheralsAccess false
-logLevel 3 sysbus
+# logLevel 3 sysbus
 
 # 10. Start the simulation clock
 start

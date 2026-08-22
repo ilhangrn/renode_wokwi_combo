@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/math/sum.h"
 
-typedef struct
-{
-    const char *name;
-    int (*fn)(void);
-} test_case_t;
+#include "../lib/sum/src/sum.h"
 
 static int passed = 0;
 static int failed = 0;

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "math/sum.h"
+#include <sum.h>
 
 #define LED_PIN 8
 
