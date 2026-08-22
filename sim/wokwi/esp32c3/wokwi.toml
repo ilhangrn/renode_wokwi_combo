@@ -1,0 +1,8 @@
+[wokwi]
+version = 1
+firmware = "../../../firmware-c/.pio/build/esp32-c3-devkitm-1/firmware.elf"
+elf = "../../../firmware-c/.pio/build/esp32-c3-devkitm-1/firmware.elf"
+
+# To use the Rust firmware, uncomment the lines below and comment out the C firmware lines above:
+# firmware = "../../../firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust-esp32c3"
+# elf = "../../../firmware-rust/target/riscv32imac-unknown-none-elf/release/firmware-rust-esp32c3"

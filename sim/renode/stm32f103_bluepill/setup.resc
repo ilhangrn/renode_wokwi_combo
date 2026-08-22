@@ -14,8 +14,8 @@ nvic Frequency 8000000
 machine LoadPlatformDescriptionFromString "led: Miscellaneous.LED @ gpioPortC 13"
 
 # 5. Define your absolute or relative firmware path directly
-$bin=@../../firmware-c/.pio/build/stm32f103_bluepill/firmware.elf
-# $bin=@../../firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103
+$bin=@../../../firmware-c/.pio/build/stm32f103_bluepill/firmware.elf
+# $bin=@../../../firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103
 
 # 6. Parse and load the compiled ELF file to memory
 sysbus LoadELF $bin

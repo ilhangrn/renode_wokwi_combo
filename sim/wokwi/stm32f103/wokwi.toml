@@ -1,0 +1,8 @@
+[wokwi]
+version = 1
+firmware = "../../../firmware-c/.pio/build/stm32f103_bluepill/firmware.elf"
+elf = "../../../firmware-c/.pio/build/stm32f103_bluepill/firmware.elf"
+
+# To use the Rust firmware, uncomment the lines below and comment out the C firmware lines above:
+# firmware = "../../../firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103"
+# elf = "../../../firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103"
