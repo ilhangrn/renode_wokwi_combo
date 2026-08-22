@@ -64,12 +64,12 @@ See [wokwi_guide.md](wokwi_guide.md) for full details.
    cd firmware-rust && cargo build --release --target thumbv7m-none-eabi --features stm32f103 --bin firmware-rust-stm32f103
    ```
 
-2. Make sure [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) points to the ELF you just built.
+2. Make sure [sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc) points to the ELF you just built.
 3. Run from the simulation directory:
 
    ```bash
    cd sim/stm32f103_bluepill
-   renode setup.resc
+   renode blue_pill.resc
    ```
 
 4. The simulation starts automatically.
@@ -112,6 +112,6 @@ Press `F5` to start a one-click debug session.
 | Target unit tests (C) ESP32-C3 | PlatformIO Unity | `cd firmware-c && pio test -e esp32-c3-devkitm-1` |
 | Target unit tests (C) STM32F103 | PlatformIO Unity | `cd firmware-c && pio test -e stm32f103_bluepill` |
 | Host unit tests (Rust) | cargo | `cd firmware-rust && cargo test --lib` |
-| Smoke test in Renode | Renode UART output | `cd sim/stm32f103_bluepill && renode setup.resc` |
+| Smoke test in Renode | Renode UART output | `cd sim/stm32f103_bluepill && renode blue_pill.resc` |
 
 See the individual guides for detailed test commands and expected output.

@@ -8,7 +8,7 @@
   - C firmware: `firmware-c/src/main_stm32f103.cpp`
   - Rust firmware: `firmware-rust/src/main_stm32f103.rs`
   - Wokwi diagram: `wokwi/stm32f103/diagram.json`
-  - Renode script: `sim/stm32f103_bluepill/setup.resc`
+  - Renode script: `sim/stm32f103_bluepill/blue_pill.resc`
 - Renode is used for **STM32F103** deterministic emulation and GDB debugging.
 - Build files have been restructured with board-specific source files and Cargo features.
 

@@ -56,7 +56,7 @@ demo_renode/
 │       └── test_sum.rs
 ├── sim/                                   # Renode simulation scripts
 │   └── stm32f103_bluepill/                # STM32F103 Blue Pill setup
-│       └── setup.resc
+│       └── blue_pill.resc
 ├── wokwi/                                 # Wokwi diagrams and firmware selection
 │   ├── esp32c3/                           # ESP32-C3-DevKitM-1 diagram
 │   │   ├── diagram.json
@@ -163,12 +163,12 @@ Build the firmware first, then start Renode from the STM32 simulation directory:
 ```bash
 cd firmware-c && pio run -e stm32f103_bluepill
 cd ../sim/stm32f103_bluepill
-renode setup.resc
+renode blue_pill.resc
 ```
 
-[sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) loads the Renode platform description, loads the selected firmware ELF, opens the USART1 analyzer, starts a GDB server on `localhost:3333`, and begins emulation.
+[sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc) loads the Renode platform description, loads the selected firmware ELF, opens the USART1 analyzer, starts a GDB server on `localhost:3333`, and begins emulation.
 
-By default the script loads the C firmware. To switch to the Rust firmware, edit the `$bin?` line in [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc):
+By default the script loads the C firmware. To switch to the Rust firmware, edit the `$bin?` line in [sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc):
 
 ```renode
 $bin?=@../../firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103
@@ -286,16 +286,16 @@ Still pending:
 ### C version
 
 - Build: `cd firmware-c && pio run -e stm32f103_bluepill`
-- Ensure [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) points to the C ELF.
-- Run: `cd sim/stm32f103_bluepill && renode setup.resc`
+- Ensure [sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc) points to the C ELF.
+- Run: `cd sim/stm32f103_bluepill && renode blue_pill.resc`
 - Attach GDB to `localhost:3333` and debug.
 - Expected output: USART1 analyzer shows `Hello from STM32F103 C Firmware!` and loop messages.
 
 ### Rust version
 
 - Build: `cd firmware-rust && cargo build --release --target thumbv7m-none-eabi --features stm32f103 --bin firmware-rust-stm32f103`
-- Edit [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) to use the Rust ELF.
-- Run: `cd sim/stm32f103_bluepill && renode setup.resc`
+- Edit [sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc) to use the Rust ELF.
+- Run: `cd sim/stm32f103_bluepill && renode blue_pill.resc`
 - Attach GDB to `localhost:3333` and debug.
 - Expected output: USART1 analyzer shows `Hello from STM32F103 Rust Firmware!` and loop messages.
 

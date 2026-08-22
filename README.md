@@ -1,4 +1,4 @@
-# demo_renode
+# Renode Wokwi Combo
 
 Learning project for embedded firmware development across C and Rust, using two MCUs and two simulator workflows.
 
@@ -130,7 +130,7 @@ ESP32-C3 is not currently supported by Renode in this project workflow.
 
 ```bash
 cd sim/stm32f103_bluepill
-renode setup.resc
+renode blue_pill.resc
 ```
 
 3. Attach GDB:
@@ -139,7 +139,7 @@ renode setup.resc
 arm-none-eabi-gdb -ex "target remote localhost:3333" firmware-c/.pio/build/stm32f103_bluepill/firmware.elf
 ```
 
-To run Rust firmware in Renode, point [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) to the Rust ELF path.
+To run Rust firmware in Renode, point [sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc) to the Rust ELF path.
 
 ## VS Code tasks
 

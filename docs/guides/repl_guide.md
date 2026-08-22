@@ -11,7 +11,7 @@ Some boards do not ship with a ready-to-use Renode `.repl` platform description.
 | [sim/esp32c3_devkitm.dts](sim/esp32c3_devkitm.dts) | Project-specific top-level DTS referencing the Zephyr ESP32-C3-DevKitM sources |
 | [sim/esp32c3_devkitm_flat.dts](sim/esp32c3_devkitm_flat.dts) | Preprocessed (flattened) DTS produced by `gcc` |
 | [sim/esp32c3_devkitm_generated.repl](sim/esp32c3_devkitm_generated.repl) | REPL produced by `dts2repl` (downloads ROM/SVD from the network) |
-| [sim/esp32c3_devkitm_generated_offline.repl](sim/esp32c3_devkitm_generated_offline.repl) | Offline-friendly REPL used by [setup.resc](sim/setup.resc) |
+| [sim/esp32c3_devkitm_generated_offline.repl](sim/esp32c3_devkitm_generated_offline.repl) | Offline-friendly REPL used by [blue_pill.resc](sim/blue_pill.resc) |
 | [sim/include/](sim/include/) | Minimal stub headers (kept for fallback/reference) |
 | [sim/generate_repl.sh](sim/generate_repl.sh) | One-command script to regenerate the REPLs |
 | `/workspaces/zephyr` | Full Zephyr repository cloned from upstream |
@@ -73,7 +73,7 @@ The generated REPL references remote files (ESP32-C3 ROM ELF and an SVD). For of
 
 ## Use the generated REPL in Renode
 
-[sim/setup.resc](sim/setup.resc) loads the offline REPL by default:
+[sim/blue_pill.resc](sim/blue_pill.resc) loads the offline REPL by default:
 
 ```renode
 mach create "esp32-c3"
@@ -112,5 +112,5 @@ Using the full Zephyr sources instead of the local stub headers gives us:
 ## Notes and limitations
 
 - Only nodes with known Renode mappings are emitted. The ESP32-C3 interrupt controller (`espressif,esp32-intc`), GPIO, timers, and other peripherals are currently skipped because dts2repl has no model for them.
-- The old stub-based files ([sim/esp32c3.dts](sim/esp32c3.dts), [sim/esp32c3_common.dtsi](sim/esp32c3_common.dtsi), [sim/esp32c3_generated.repl](sim/esp32c3_generated.repl), etc.) are kept for reference but are no longer used by [setup.resc](sim/setup.resc).
+- The old stub-based files ([sim/esp32c3.dts](sim/esp32c3.dts), [sim/esp32c3_common.dtsi](sim/esp32c3_common.dtsi), [sim/esp32c3_generated.repl](sim/esp32c3_generated.repl), etc.) are kept for reference but are no longer used by [blue_pill.resc](sim/blue_pill.resc).
 - For a production project, keep the Zephyr clone updated and re-run [sim/generate_repl.sh](sim/generate_repl.sh) after major Zephyr upgrades.

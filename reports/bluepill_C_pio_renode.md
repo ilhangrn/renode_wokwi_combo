@@ -1,4 +1,4 @@
-root@343c02b5f414:/workspaces/demo_renode/sim/stm32f103_bluepill# renode setup.resc 
+root@343c02b5f414:/workspaces/demo_renode/sim/stm32f103_bluepill# renode blue_pill.resc 
 
 (renode:3328): Gtk-WARNING **: 20:51:03.742: Locale not supported by C library.
         Using the fallback 'C' locale.
@@ -8,8 +8,8 @@ root@343c02b5f414:/workspaces/demo_renode/sim/stm32f103_bluepill# renode setup.r
 20:51:04.0548 [INFO] Loaded monitor commands from: /opt/renode/scripts/monitor.py
 Renode, version 1.16.1 (d66b0c2a-202602160933)
 
-(monitor) i $CWD/setup.resc
-20:51:04.1457 [INFO] Including script(s): /workspaces/demo_renode/sim/stm32f103_bluepill/setup.resc
+(monitor) i $CWD/blue_pill.resc
+20:51:04.1457 [INFO] Including script(s): /workspaces/demo_renode/sim/stm32f103_bluepill/blue_pill.resc
 20:51:04.1581 [INFO] System bus created.
 20:51:04.4961 [WARNING] Translation cache size 536870912 is larger than maximum allowed 134217728. It will be clamped to maximum
 20:51:04.7639 [INFO] sysbus: Loaded SVD: /tmp/renode-3328/48df15b3-71e8-4810-bae0-002dd25b6f46.tmp. Name: STM32F103. Description: STM32F103.

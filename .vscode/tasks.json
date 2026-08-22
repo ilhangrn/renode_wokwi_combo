@@ -91,7 +91,7 @@
             "type": "shell",
             "command": "renode",
             "args": [
-                "setup.resc"
+                "blue_pill.resc"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/sim/stm32f103_bluepill"
@@ -116,7 +116,7 @@
             "type": "shell",
             "command": "renode",
             "args": [
-                "setup.resc"
+                "blue_pill.resc"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/sim/stm32f103_bluepill",
@@ -145,13 +145,13 @@
             "command": "pkill",
             "args": [
                 "-f",
-                "renode.*setup.resc"
+                "renode.*blue_pill.resc"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [],
-            "detail": "Terminate any running Renode instance started from setup.resc"
+            "detail": "Terminate any running Renode instance started from blue_pill.resc"
         },
         {
             "label": "Test C Host",

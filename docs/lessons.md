@@ -76,7 +76,7 @@ $$
 
 ### Solution
 
-Set Renode's writable NVIC frequency to match the firmware clock in `setup.resc`:
+Set Renode's writable NVIC frequency to match the firmware clock in `blue_pill.resc`:
 
 ```renode
 nvic Frequency 8000000

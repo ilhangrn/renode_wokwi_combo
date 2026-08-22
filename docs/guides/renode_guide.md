@@ -17,10 +17,10 @@ Then start Renode from the STM32 simulation directory:
 
 ```bash
 cd ../sim/stm32f103_bluepill
-renode setup.resc
+renode blue_pill.resc
 ```
 
-[sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) performs the following steps:
+[sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc) performs the following steps:
 
 1. Creates a machine named `stm32f103_bluepill`.
 2. Loads Renode's built-in STM32F103 Blue Pill platform description.
@@ -36,17 +36,17 @@ The default script loads the C firmware:
 $bin?=@../../firmware-c/.pio/build/stm32f103_bluepill/firmware.elf
 ```
 
-To use the Rust firmware, comment out the C line and uncomment the Rust line in [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc):
+To use the Rust firmware, comment out the C line and uncomment the Rust line in [sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc):
 
 ```renode
 $bin?=@../../firmware-rust/target/thumbv7m-none-eabi/release/firmware-rust-stm32f103
 ```
 
-> **Important:** [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) uses relative paths, so it must be started from the `sim/stm32f103_bluepill/` directory. The VS Code task already does this; if you run Renode manually, use `cd sim/stm32f103_bluepill` first.
+> **Important:** [sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc) uses relative paths, so it must be started from the `sim/stm32f103_bluepill/` directory. The VS Code task already does this; if you run Renode manually, use `cd sim/stm32f103_bluepill` first.
 
 ## Run the virtual CPU
 
-[sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc) calls `start`, so emulation begins automatically. If you attach GDB before `start`, you can control execution from the debugger.
+[sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc) calls `start`, so emulation begins automatically. If you attach GDB before `start`, you can control execution from the debugger.
 
 Or start/pause emulation from GDB after attaching:
 
@@ -75,7 +75,7 @@ quit
 Or from another terminal:
 
 ```bash
-pkill -f "renode.*stm32f103_bluepill/setup.resc"
+pkill -f "renode.*stm32f103_bluepill/blue_pill.resc"
 ```
 
 ## Debug with GDB
@@ -150,7 +150,7 @@ Find the generated test ELF:
 find .pio/build/stm32f103_bluepill -name '*.elf' -type f
 ```
 
-Point Renode at the test ELF in [sim/stm32f103_bluepill/setup.resc](sim/stm32f103_bluepill/setup.resc), then start emulation. The USART1 analyzer shows Unity output:
+Point Renode at the test ELF in [sim/stm32f103_bluepill/blue_pill.resc](sim/stm32f103_bluepill/blue_pill.resc), then start emulation. The USART1 analyzer shows Unity output:
 
 ```text
 test_sum.cpp:15:test_sum_positive_numbers:PASS
@@ -165,7 +165,7 @@ For CI or automated checks, run Renode without the GUI:
 
 ```bash
 cd sim/stm32f103_bluepill
-renode --disable-xwt --console setup.resc
+renode --disable-xwt --console blue_pill.resc
 ```
 
 Use the `--port` option or a script to capture USART output for assertions.
@@ -186,10 +186,10 @@ Select **Debug STM32 C Firmware in Renode** or **Debug STM32 Rust Firmware in Re
 | --- | --- | --- |
 | `Could not find file 'platforms/boards/stm32f103_bluepill.repl'` | Wrong Renode platform path or missing built-in platform | Verify Renode version and platform path |
 | `There was an error executing command 'sysbus LoadELF $bin'` / signature mismatch | The firmware ELF does not exist at the configured path | Build the firmware first (`pio run -e stm32f103_bluepill` or `cargo build ...`) |
-| `Cannot load ELF` | ELF path in `setup.resc` is wrong or firmware not built | Build the firmware and check the path |
+| `Cannot load ELF` | ELF path in `blue_pill.resc` is wrong or firmware not built | Build the firmware and check the path |
 | `Unable to connect to localhost:3333` | Renode is not running or port is in use | Start Renode first or kill stale processes |
 | GDB cannot find source | ELF was built without `-g3` | Rebuild with debug flags |
-| Orphan Renode process after debug | Cleanup task did not run | Run `pkill -f "renode.*stm32f103_bluepill/setup.resc"` |
+| Orphan Renode process after debug | Cleanup task did not run | Run `pkill -f "renode.*stm32f103_bluepill/blue_pill.resc"` |
 
 ---
 
@@ -212,10 +212,10 @@ Then start Renode from the `sim/` directory:
 
 ```bash
 cd sim
-renode setup.resc
+renode blue_pill.resc
 ```
 
-The archived `sim/setup.resc` performed the following steps:
+The archived `sim/blue_pill.resc` performed the following steps:
 
 1. Created a machine named `esp32-c3`.
 2. Loaded the platform description from `sim/esp32c3_devkitm_generated_offline.repl`.

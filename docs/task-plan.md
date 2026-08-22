@@ -29,7 +29,7 @@ demo_renode/
 │       └── config.toml
 ├── sim/
 │   └── stm32f103_bluepill/
-│       └── setup.resc
+│       └── blue_pill.resc
 ├── wokwi/
 │   ├── esp32c3/
 │   │   ├── diagram.json
@@ -105,7 +105,7 @@ Definition of done:
 
 ### M4 - Renode Simulation Wiring (STM32F103)
 
-- [x] Create `sim/stm32f103_bluepill/setup.resc` using Renode's built-in platform.
+- [x] Create `sim/stm32f103_bluepill/blue_pill.resc` using Renode's built-in platform.
 - [ ] Run Renode manually and confirm the virtual platform boots and prints to USART1.
 - [ ] Confirm GDB server starts on `localhost:3333`.
 
