@@ -1,3 +1,7 @@
 .DS_Store
 /firmware-rust/target/
 .pio/
+
+# we added stm32cubemc folder, we need ignore extras like debug folder
+blue_cube_proj/bluepill_demo/Debug/Core
+blue_cube_proj/bluepill_demo/Debug/Drivers
