@@ -17,13 +17,12 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <stdio.h>
-#include <string.h>
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -82,7 +81,7 @@ int main(void)
   /* USER CODE END Init */
 
   /* Configure the system clock */
-  /* SystemClock_Config(); */
+//  SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
@@ -99,14 +98,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-
-// we will blink the LED and print a message to the UART every second
+    // we will blink the LED and print a message to the UART every second
     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     char message[48];
     snprintf(message, sizeof(message), "Cubemx C loop executed. Pin PC13 state: %d\r\n", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));
     HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), HAL_MAX_DELAY);
     HAL_Delay(1000);
+    /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -195,7 +194,6 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
