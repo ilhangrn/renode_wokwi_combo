@@ -123,7 +123,7 @@ int main(void)
  8000172:	4810      	ldr	r0, [pc, #64]	@ (80001b4 <main+0x58>)
  8000174:	f000 fcbd 	bl	8000af2 <HAL_GPIO_TogglePin>
     char message[48];
-    snprintf(message, sizeof(message), "Cubem-X C loop executed. Pin PC13 state: %d\r\n", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));
+    snprintf(message, sizeof(message), "Cubem-X2 C loop executed. Pin PC13 state: %d\r\n", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));
  8000178:	f44f 5100 	mov.w	r1, #8192	@ 0x2000
  800017c:	480d      	ldr	r0, [pc, #52]	@ (80001b4 <main+0x58>)
  800017e:	f000 fc89 	bl	8000a94 <HAL_GPIO_ReadPin>

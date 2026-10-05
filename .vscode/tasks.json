@@ -13,10 +13,7 @@
             "options": {
                 "cwd": "${workspaceFolder}/firmware-c"
             },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "problemMatcher": [
                 "$platformio"
             ],
@@ -52,7 +49,10 @@
             "options": {
                 "cwd": "${workspaceFolder}/blue_cube_proj/bluepill_demo/Debug"
             },
-            "group": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "problemMatcher": [
                 "$gcc"
             ],

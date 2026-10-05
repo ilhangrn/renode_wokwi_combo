@@ -6,3 +6,4 @@
 blue_cube_proj/bluepill_demo/Debug/Core
 blue_cube_proj/bluepill_demo/Debug/Drivers
 .metadata/
+*.vcd

@@ -101,7 +101,7 @@ int main(void)
     // we will blink the LED and print a message to the UART every second
     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     char message[48];
-    snprintf(message, sizeof(message), "Cubem-X C loop executed. Pin PC13 state: %d\r\n", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));
+    snprintf(message, sizeof(message), "Cubem-X2 C loop executed. Pin PC13 state: %d\r\n", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));
     HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), HAL_MAX_DELAY);
     HAL_Delay(1000);
     /* USER CODE END WHILE */
