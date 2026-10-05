@@ -1,0 +1,36 @@
+{
+    "version": 4,
+    "configurations": [
+        {
+            "name": "STM32F103C8 (ARM GCC)",
+            "compilerPath": "/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.macosaarch64_1.0.0.202602081740/tools/bin/arm-none-eabi-gcc",
+            "compilerArgs": [
+                "-mcpu=cortex-m3",
+                "-mthumb",
+                "--specs=nano.specs"
+            ],
+            "intelliSenseMode": "gcc-arm",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "defines": [
+                "DEBUG",
+                "USE_HAL_DRIVER",
+                "STM32F103xB"
+            ],
+            "includePath": [
+                "${workspaceFolder}/blue_cube_proj/bluepill_demo/Core/Inc",
+                "${workspaceFolder}/blue_cube_proj/bluepill_demo/Drivers/STM32F1xx_HAL_Driver/Inc",
+                "${workspaceFolder}/blue_cube_proj/bluepill_demo/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/blue_cube_proj/bluepill_demo/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
+                "${workspaceFolder}/blue_cube_proj/bluepill_demo/Drivers/CMSIS/Include"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/blue_cube_proj/bluepill_demo/Core",
+                    "${workspaceFolder}/blue_cube_proj/bluepill_demo/Drivers"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ]
+}
