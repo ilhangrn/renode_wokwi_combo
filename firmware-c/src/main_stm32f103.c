@@ -5,7 +5,9 @@
 
 #include <sum.h>
 
-static UART_HandleTypeDef uart1;
+// NOT IN USE IG, we use belupill_demo folder
+
+static UART_HandleTypeDef uart1; 
 
 void SysTick_Handler(void)
 {

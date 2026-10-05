@@ -33,7 +33,7 @@ cpu VectorTableOffset 0x08000000
 showAnalyzer sysbus.usart1
 
 # 9. Bind a GDB network debugging server (e.g., for VSCode or terminal GDB)
-# machine StartGdbServer 3333
+machine StartGdbServer 3333
 # sysbus LogAllPeripheralsAccess false
 # logLevel 3 sysbus
 

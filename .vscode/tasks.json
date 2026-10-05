@@ -41,6 +41,22 @@
             "detail": "Build the STM32F103 Blue Pill C/Arduino firmware with PlatformIO"
         },
         {
+            "label": "Build CubeIDE Firmware (STM32F103)",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "all"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/blue_cube_proj/bluepill_demo/Debug"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Build blue_cube_proj/bluepill_demo/Core/Src/main.c"
+        },
+        {
             "label": "Build Rust Firmware (ESP32-C3)",
             "type": "shell",
             "command": "cargo",
@@ -94,8 +110,9 @@
                 "blue_pill.resc"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/sim/stm32f103_bluepill"
+                "cwd": "${workspaceFolder}/sim/renode/stm32f103_bluepill"
             },
+            "dependsOn": "Build CubeIDE Firmware (STM32F103)",
             "isBackground": true,
             "problemMatcher": {
                 "pattern": {
@@ -119,7 +136,7 @@
                 "blue_pill.resc"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/sim/stm32f103_bluepill",
+                "cwd": "${workspaceFolder}/sim/renode/stm32f103_bluepill",
                 "env": {
                     "RENODE_FW": "rust"
                 }

@@ -5,10 +5,10 @@
             "name": "Debug STM32 C Firmware in Renode",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/firmware-c/.pio/build/stm32f103_bluepill/firmware.elf",
+            "program": "${workspaceFolder}/blue_cube_proj/bluepill_demo/Debug/bluepill_demo.elf",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/firmware-c",
+            "cwd": "${workspaceFolder}/blue_cube_proj/bluepill_demo",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -56,6 +56,18 @@
             ],
             "preLaunchTask": "Start Renode Simulation (STM32 Rust)",
             "postDebugTask": "Stop Renode"
+        },
+        {
+            "name": "Debug Blue Pill (DAPLink / pyOCD)",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "pyocd",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/blue_cube_proj/bluepill_demo/Debug/bluepill_demo.elf",
+            "targetId": "stm32f103c8",
+            "interface": "swd",
+            "overrideGDBServerStartedRegex": "GDB server (?:started (?:at|on)|listening on) port",
+            "runToEntryPoint": "main"
         }
     ]
 }
