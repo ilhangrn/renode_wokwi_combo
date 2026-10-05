@@ -12,7 +12,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/usr/local/bin/arm-none-eabi-gdb",
+            "miDebuggerPath": "/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.macosaarch64_1.0.0.202602081740/tools/bin/arm-none-eabi-gdb",
             "miDebuggerServerAddress": "localhost:3333",
             "setupCommands": [
                 {
@@ -40,7 +40,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/usr/local/bin/arm-none-eabi-gdb",
+            "miDebuggerPath": "/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.macosaarch64_1.0.0.202602081740/tools/bin/arm-none-eabi-gdb",
             "miDebuggerServerAddress": "localhost:3333",
             "setupCommands": [
                 {
@@ -64,6 +64,8 @@
             "servertype": "pyocd",
             "cwd": "${workspaceFolder}",
             "executable": "${workspaceFolder}/blue_cube_proj/bluepill_demo/Debug/bluepill_demo.elf",
+            "gdbPath": "/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.macosaarch64_1.0.0.202602081740/tools/bin/arm-none-eabi-gdb",
+            "objdumpPath": "/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.macosaarch64_1.0.0.202602081740/tools/bin/arm-none-eabi-objdump",
             "targetId": "stm32f103c8",
             "interface": "swd",
             "overrideGDBServerStartedRegex": "GDB server (?:started (?:at|on)|listening on) port",
