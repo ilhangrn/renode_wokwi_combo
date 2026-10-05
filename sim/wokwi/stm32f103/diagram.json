@@ -6,17 +6,35 @@
     {
       "type": "board-stm32-bluepill",
       "id": "stm32",
-      "top": 0,
-      "left": 0,
+      "top": 60,
+      "left": 80,
       "attrs": {}
     },
     {
       "type": "wokwi-led",
       "id": "led1",
-      "top": 122.85,
-      "left": -61.39,
+      "top": 285,
+      "left": 110,
       "attrs": {
-        "color": "red"
+        "color": "green"
+      }
+    },
+    {
+      "type": "board-ssd1306",
+      "id": "oled1",
+      "top": 20,
+      "left": 260,
+      "attrs": {
+        "i2cAddress": "0x3c"
+      }
+    },
+    {
+      "type": "wokwi-logic-analyzer",
+      "id": "logic1",
+      "top": 180,
+      "left": 260,
+      "attrs": {
+        "channelNames": "LED,UART_TX,UART_RX,I2C_SCL,I2C_SDA,D5,D6,D7"
       }
     }
   ],
@@ -25,20 +43,29 @@
       "stm32:A10",
       "$serialMonitor:TX",
       "green",
-      []
+      [
+        "h-20",
+        "v-20"
+      ]
     ],
     [
       "stm32:A9",
       "$serialMonitor:RX",
       "green",
-      []
+      [
+        "h-30",
+        "v-30"
+      ]
     ],
     [
       "stm32:C13",
       "led1:A",
       "green",
       [
-        "h0"
+        "h30",
+        "v45",
+        "*",
+        "v-20"
       ]
     ],
     [
@@ -46,10 +73,133 @@
       "stm32:GND.1",
       "black",
       [
-        "v-0.85",
-        "h-32.28",
-        "v-107.9"
+        "v20",
+        "h-35",
+        "*",
+        "h-25",
+        "v20"
+      ]
+    ],
+    [
+      "stm32:3V3.2",
+      "oled1:VCC",
+      "red",
+      [
+        "h40",
+        "v-55",
+        "*",
+        "v-15"
+      ]
+    ],
+    [
+      "stm32:GND.2",
+      "oled1:GND",
+      "black",
+      [
+        "h50",
+        "v-45",
+        "*",
+        "v-25"
+      ]
+    ],
+    [
+      "stm32:B6",
+      "oled1:SCL",
+      "blue",
+      [
+        "h-25",
+        "v-135",
+        "h155",
+        "*",
+        "v-35"
+      ]
+    ],
+    [
+      "stm32:B7",
+      "oled1:SDA",
+      "green",
+      [
+        "h-35",
+        "v-145",
+        "h175",
+        "*",
+        "v-45"
+      ]
+    ],
+    [
+      "stm32:C13",
+      "logic1:D0",
+      "green",
+      [
+        "h55",
+        "*",
+        "h-25"
+      ]
+    ],
+    [
+      "stm32:A9",
+      "logic1:D1",
+      "blue",
+      [
+        "h-45",
+        "v130",
+        "h155",
+        "*",
+        "h-35"
+      ]
+    ],
+    [
+      "stm32:A10",
+      "logic1:D2",
+      "purple",
+      [
+        "h-55",
+        "v135",
+        "h165",
+        "*",
+        "h-45"
+      ]
+    ],
+    [
+      "stm32:B6",
+      "logic1:D3",
+      "orange",
+      [
+        "h-65",
+        "v80",
+        "h175",
+        "*",
+        "h-55"
+      ]
+    ],
+    [
+      "stm32:B7",
+      "logic1:D4",
+      "yellow",
+      [
+        "h-75",
+        "v85",
+        "h185",
+        "*",
+        "h-65"
+      ]
+    ],
+    [
+      "stm32:GND.3",
+      "logic1:GND",
+      "black",
+      [
+        "h30",
+        "v220",
+        "h80",
+        "*",
+        "h-25"
       ]
     ]
-  ]
+  ],
+  "serialMonitor": {
+    "display": "terminal",
+    "newline": "lf",
+    "convertEol": false
+  }
 }
